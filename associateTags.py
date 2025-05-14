@@ -18,11 +18,16 @@ def update_tags():
     placa_ids = [row[0] for row in cursor_cronos.fetchall()]
 
     # Associa na ordem: tag_epc -> Placas.id
+    count = 0
     for tag, placa_id in zip(tag_epcs, placa_ids):
-        cursor_cronos.execute("UPDATE Placas SET Tag = ? WHERE PlacaId = ?", (tag, placa_id))
+        cursor_cronos.execute("UPDATE Placas SET Tag = ?, TagStatus = ? WHERE PlacaId = ?", (tag, "Registrada", placa_id))
+        count += 1
+    
 
     # Salva e fecha
     conn_cronos.commit()
+    print(f"{count} Tags associadas.")
     conn_cronos.close()
 
 update_tags()
+

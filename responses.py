@@ -3,11 +3,11 @@ import time
 import random
 import sqlite3
 
-DB_PATH = "sqlite3.db"
+DB_PATH = "tags.db"
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 #Select all unique tag epc from athletes
-query = "SELECT DISTINCT tag_epc FROM athlete"
+query = "SELECT DISTINCT tag_epc FROM tags"
 cursor.execute(query)
 hex_strings = [row[0] for row in cursor.fetchall() if row[0] is not None]
 conn.close()
@@ -16,9 +16,7 @@ already_chosen = []
 nRandomReadings = int(input("Digite a quantidade de tags por rodada: \n"))
 
 def checksum(packet):
-    u_sum = sum(packet)  # Soma todos os elementos da lista
-    u_sum = (~u_sum & 0xFF) + 1  # Calcula o complemento de um e adiciona 1
-    return u_sum
+    return ((~sum(packet) + 1) & 0xFF)
 
 def string_to_bytes(s):
     # Quebrar a string em pares de dois caracteres
